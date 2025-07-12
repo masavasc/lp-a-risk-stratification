@@ -130,12 +130,16 @@
     }
     .references { font-size: 0.95em; color: #666; min-height: 1.2em; }
 
+    /* ------ スマホでの入力時ズーム回避！ -------- */
     @media (max-width: 600px) {
       html, body { font-size: 15px; }
       .container { max-width: 99vw; }
       .header .logo { width: 32px; }
       .labels .label-125  { left: calc(100% * 125 / 150 - 14px); }
       .labels .label-unit { left: 99%; }
+      input[type="number"], input[type="text"], input, select, textarea {
+        font-size: 16px !important;
+      }
     }
     @media (min-width: 601px) {
       html, body { font-size: 17px; }
