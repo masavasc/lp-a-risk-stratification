@@ -2,315 +2,333 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lp(a)検査値標準化ツール</title>
+  <title>Lp(a) リスク層別化ツール（sekisui用）</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     :root {
       --logo-red:      #E60012;
       --logo-purple:   #5C2682;
-      --header-bg:     var(--logo-red);
-      --accent:        var(--logo-purple);
-      --accent-light:  var(--logo-red);
+      --accent-light:  #E60012;
       --border:        #D8BFD8;
-      --btn-clear:     #666;
+      --btn-clear:     #888;
       --text:          #333;
+      /* リスクカラー：原色に近い濃さ */
+      --color-low:        #28a745; /* 緑 */
+      --color-inter:      #ffc107; /* 黄 */
+      --color-high:       #dc3545; /* 赤 */
+      --color-very-high:  #800080; /* より濃い紫 */
+      --text-on-risk:     #fff;
     }
     * { box-sizing: border-box; }
     body {
+      margin: 0; padding: 1em;
       font-family: "Helvetica Neue", sans-serif;
       background: #fafafa;
       color: var(--text);
-      margin: 0;
-      padding: 0;
     }
     .container {
       max-width: 420px;
       margin: 0 auto;
-      padding: 1em;
     }
-    /* ヘッダー */
+    /*――― ヘッダー ―――*/
     .header {
-      background: var(--header-bg);
-      padding: 0.6em 1em;
-      border-radius: 0 0 8px 8px;
+      background: var(--logo-red);
+      color: #fff;
+      padding: 0.6em;
+      border-radius: 8px 8px 0 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.4em;
     }
     .header .logo {
       width: 36px;
-      height: auto;
-      margin-right: 0.6em;
+      margin-right: 0.5em;
     }
-    .header h1 {
-      margin: 0;
-      font-size: 1.4em;
-      color: #fff;
+    .header span {
+      white-space: nowrap;
     }
-    /* 説明文 */
+    .header .subtitle {
+      font-size: 0.7em; /* さらに50％小さく */
+      margin-left: 0.3em;
+    }
+    /*――― 説明文 ―――*/
     .description {
       background: #fff;
       border: 2px solid var(--border);
-      border-radius: 8px;
-      padding: 0.2em 0.4em;
-      margin: 0.3em 0;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      padding: 0.8em;
+      margin-bottom: 1em;
       font-size: 0.95em;
       line-height: 1.4;
     }
-    .description p {
-      margin: 0;
-      padding: 0;
-    }
-    /* フォーム */
-    form {
-      background: #fff;
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      padding: 1em;
-    }
-    .field {
-      margin-bottom: 1em;
-    }
-    .field label {
-      display: block;
-      margin-bottom: 0.3em;
+    /*――― 入力フォーム ―――*/
+    .input-label {
       font-weight: bold;
+      margin-bottom: 0.3em;
     }
-    .field input[type="number"] {
-      width: 100%;
-      padding: 0.6em;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1em;
-    }
-    .error {
-      color: #d00;
-      font-size: 0.85em;
-      display: none;
-      margin-top: 0.3em;
-    }
-    /* キット選択グリッド（2列） */
-    .kit-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.5em;
-    }
-    .kit-grid label {
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      padding: 0.5em;
-      cursor: pointer;
+    .input-row {
       display: flex;
-      align-items: center;
+      gap: 0.5em;
+      margin-bottom: 0.5em;
     }
-    .kit-grid input[type="radio"] {
-      margin-right: 0.4em;
+    .input-row input {
+      flex: 1;
+      padding: 0.6em;
+      font-size: 1em;
+      border: 2px solid var(--border);
+      border-radius: 4px;
     }
-    /* ボタン */
-    .btn {
-      width: 100%;
-      padding: 0.8em;
+    .input-row button {
+      flex: 1;
+      padding: 0.6em;
       font-size: 1em;
       border: none;
       border-radius: 4px;
+      background: linear-gradient(to right, var(--logo-purple), var(--accent-light));
+      color: #fff;
       cursor: pointer;
     }
-    .btn-calc {
-      background: linear-gradient(to right, var(--accent), var(--accent-light));
-      color: #fff;
-      margin-top: 0.5em;
-    }
-    .btn-calc:disabled {
+    .input-row button:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
-    .btn-clear {
-      background: var(--btn-clear);
-      color: #fff;
-      margin-top: 0.5em;
+    /*――― 結果 ―――*/
+    .result-row {
+      margin-bottom: 1em;
     }
-    /* 結果表示 */
     .result-box {
       background: #fff;
       border: 2px solid var(--border);
       border-radius: 8px;
-      padding: 1em;
-      margin-top: 1em;
+      padding: 0.6em;
       text-align: center;
     }
     .result-box .label {
-      font-weight: bold;
-      margin-bottom: 0.5em;
       display: block;
+      font-weight: bold;
+      margin-bottom: 0.3em;
     }
     .result-box .value {
       font-size: 1.4em;
-      color: var(--accent);
+      color: var(--logo-purple);
     }
-    /* 注意書き */
-    .disclaimer {
-      font-size: 0.85em;
-      color: #666;
-      margin-top: 0.5em;
-      line-height: 1.4;
-    }
-    /* 制作者 */
-    .creator {
+    /*――― リスク表示 ―――*/
+    .risk-box {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 1em;
       text-align: center;
+      margin-bottom: 1em;
+      color: var(--text-on-risk);
+    }
+    .risk-box.low          { background: var(--color-low); }
+    .risk-box.intermediate { background: var(--color-inter); }
+    .risk-box.high         { background: var(--color-high); }
+    .risk-box.very-high    { background: var(--color-very-high); }
+    .risk-box .title {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 0.3em;
+    }
+    .risk-box .subtitle {
+      font-size: 1em;
+    }
+    /*――― SVG 凡例バー ―――*/
+    svg#legendSvg {
+      width: 100%;
+      height: 50px;
+      overflow: visible;
+      display: block;
+      margin-bottom: 0;
+    }
+    .marker {
+      transform-origin: center;
+      animation: pulse 1s ease-in-out infinite;
+      stroke: #fff;
+      stroke-width: 2;
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50%     { transform: scale(1.05); }
+    }
+    /*――― 目盛りラベル ―――*/
+    .labels {
+      position: relative;
+      height: 0;
+      margin-bottom: 1em;
+    }
+    .labels span {
+      position: absolute;
+      top: -0.9em;
+      font-size: 1em;
+      color: #555;
+      transform: translateX(-50%);
+    }
+    .labels .label-25   { left: 16.667%; }
+    .labels .label-75   { left: 50%;     }
+    .labels .label-125  { left: 83.333%; }
+    .labels .label-unit { left: 100%;    transform: translateX(-100%); }
+    /*――― クリアボタン ―――*/
+    .btn-clear {
+      display: block;
+      width: 100%;
+      padding: 0.8em;
+      border: none;
+      border-radius: 4px;
+      background: var(--btn-clear);
+      color: #fff;
+      font-size: 1em;
+      cursor: pointer;
+      margin-bottom: 0.5em;
+    }
+    /*――― 文献スペース ―――*/
+    .references {
+      min-height: 2em;
       font-size: 0.85em;
       color: #666;
-      margin-top: 0.5em;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- ヘッダー -->
     <div class="header">
-      <img src="jas-logo.png" alt="日本動脈硬化学会ロゴ" class="logo">
-      <h1>Lp(a)検査値標準化ツール</h1>
+      <img src="jas-logo.png" alt="JASロゴ" class="logo">
+      <span>Lp(a) リスク層別化ツール</span>
+      <span class="subtitle">（sekisui用）</span>
     </div>
 
-    <!-- 説明文 -->
     <div class="description">
-      <p>このツールは、Lp(a)検査値のmg/dL表記をnmol/Lに変換します。</p>
+      測定されたLp(a)検査値を(mg/dL→nmol/L)に変換・標準化し、複合心血管リスク（ASCVD）の層別化と相対リスクを表示します。
     </div>
 
-    <!-- 入力フォーム -->
-    <form id="calcForm">
-      <div class="field">
-        <label for="inputValue">測定値を入力（mg/dL）</label>
-        <input id="inputValue" type="number" step="any" placeholder="例：16">
-        <p id="inputError" class="error">有効な数値を入力してください</p>
-      </div>
-      <div class="field">
-        <fieldset>
-          <legend>検査キットを選択</legend>
-          <div class="kit-grid">
-            <label><input type="radio" name="kit" value="kitA">Sekisui</label>
-            <label><input type="radio" name="kit" value="kitB">Denka（国内）</label>
-            <label><input type="radio" name="kit" value="kitC">Denka（海外）</label>
-            <label><input type="radio" name="kit" value="kitD">Nittobo</label>
-          </div>
-        </fieldset>
-        <p id="kitError" class="error">キットを選択してください</p>
-      </div>
-      <button type="button" id="calcBtn" class="btn btn-calc" disabled>計算する</button>
-    </form>
-
-    <!-- 結果表示 -->
-    <div class="result-box">
-      <span class="label">標準値</span>
-      <span class="value" id="result">--</span>
-      <span id="resultUnit"> nmol/L</span>
+    <div class="input-label">測定値を入力 (mg/dL)</div>
+    <div class="input-row">
+      <input id="inputValue" type="number" placeholder="例: 16">
+      <button id="calcBtn" disabled>計算する</button>
     </div>
 
-    <!-- 注意書き -->
-    <p class="disclaimer">
-   　　0.6以下の標準値はすべて「0.6未満」と表示されます。 <br>
-     
-    </p>
+    <div class="result-row">
+      <div class="result-box">
+        <span class="label">換算値 (nmol/L)</span>
+        <span class="value" id="converted">--</span>
+      </div>
+    </div>
 
-    <!-- クリアボタン -->
-    <button type="button" id="clearBtn" class="btn btn-clear">入力内容をクリア</button>
+    <div id="riskBox" class="risk-box">
+      <div class="title" id="riskCategory">— Risk Category —</div>
+      <div class="subtitle" id="relativeRisk">— 倍のASCVDリスク</div>
+    </div>
 
-    <!-- 制作者 -->
-    <p class="creator">参考文献: J Atheroscler Thromb. 2025;32:580-595</p>
+    <svg id="legendSvg"></svg>
+    <div class="labels">
+      <span class="label-25">25</span>
+      <span class="label-75">75</span>
+      <span class="label-125">125</span>
+      <span class="label-unit">nmol/L</span>
+    </div>
+
+    <button id="clearBtn" class="btn-clear">入力内容をクリア</button>
+    <div class="references">
+      <!-- ここに文献名を記載 -->
+    </div>
   </div>
 
   <script>
-    // キットごとの換算式
-    const kitFormulas = {
-      kitA: x => 3.77 * x - 2.39,
-      kitB: x => 2.04 * x - 2.77,
-      kitC: x => 2.08 * x - 2.73,
-      kitD: x => 2.40 * x - 8.64,
-    };
-    // 出力単位（すべて nmol/L）
-    const kitUnits = {
-      kitA: 'nmol/L',
-      kitB: 'nmol/L',
-      kitC: 'nmol/L',
-      kitD: 'nmol/L'
+    const convertFunc = x => 3.77 * x - 2.39;
+    const incidence = {
+      '<=25':   0.21,
+      '25-75':  0.34,
+      '75-125': 0.36,
+      '>125':   0.42
     };
 
-    const inputEl    = document.getElementById('inputValue');
-    const inputErr   = document.getElementById('inputError');
-    const kitErr     = document.getElementById('kitError');
-    const calcBtn    = document.getElementById('calcBtn');
-    const clearBtn   = document.getElementById('clearBtn');
-    const resultEl   = document.getElementById('result');
-    const resultUnit = document.getElementById('resultUnit');
+    const inputEl   = document.getElementById('inputValue');
+    const calcBtn   = document.getElementById('calcBtn');
+    const convEl    = document.getElementById('converted');
+    const catEl     = document.getElementById('riskCategory');
+    const relEl     = document.getElementById('relativeRisk');
+    const riskBox   = document.getElementById('riskBox');
+    const legendSvg = document.getElementById('legendSvg');
+    const clearBtn  = document.getElementById('clearBtn');
 
-    function showToast(msg) {
-      alert(msg);
-    }
+    inputEl.addEventListener('input', () => {
+      calcBtn.disabled = !(inputEl.value.trim() && !isNaN(parseFloat(inputEl.value)));
+    });
 
-    // 入力＆選択の状態でボタン有効化
-    function refreshButtonState() {
-      const hasVal = !isNaN(parseFloat(inputEl.value));
-      const hasKit = !!document.querySelector('input[name="kit"]:checked');
-      calcBtn.disabled = !(hasVal && hasKit);
-    }
+    function drawLegend(raw) {
+      const w          = legendSvg.clientWidth;
+      const h          = legendSvg.clientHeight;
+      const barH       = 10;
+      const thresholds = [0,25,75,125,150];
+      const total      = thresholds[4];
 
-    // インライン・バリデーション
-    function validate() {
-      let ok = true;
-      if (inputEl.value.trim() === '' || isNaN(parseFloat(inputEl.value))) {
-        inputErr.style.display = 'block'; ok = false;
-      } else {
-        inputErr.style.display = 'none';
-      }
-      if (!document.querySelector('input[name="kit"]:checked')) {
-        kitErr.style.display = 'block'; ok = false;
-      } else {
-        kitErr.style.display = 'none';
-      }
-      return ok;
-    }
-
-    // 計算処理
-    function calculate() {
-      if (!validate()) {
-        showToast('入力内容を確認してください');
-        return;
-      }
-      const x   = parseFloat(inputEl.value);
-      const kit = document.querySelector('input[name="kit"]:checked').value;
-      // 一度だけ宣言
-      const raw = kitFormulas[kit](x);
-
-      // 0.6以下なら「0.6未満」、それ以外は小数点2桁
-      let displayValue;
-      if (raw <= 0.6) {
-        displayValue = '0.6未満';
-      } else {
-        displayValue = raw.toFixed(2);
+      if (!legendSvg.querySelector('rect')) {
+        ['green','orange','red','purple'].forEach((col,i) => {
+          const start = thresholds[i], end = thresholds[i+1];
+          const rect  = document.createElementNS(legendSvg.namespaceURI,'rect');
+          rect.setAttribute('x',     (start/total)*w);
+          rect.setAttribute('y',     (h-barH)/2);
+          rect.setAttribute('width', ((end-start)/total)*w);
+          rect.setAttribute('height', barH);
+          rect.setAttribute('fill',  col);
+          legendSvg.appendChild(rect);
+        });
       }
 
-      resultEl.textContent   = displayValue;
-      resultUnit.textContent = kitUnits[kit];
+      const old = legendSvg.querySelector('polygon.marker');
+      if (old) legendSvg.removeChild(old);
+
+      let color;
+      if      (raw <= 25)   color = 'green';
+      else if (raw <= 75)   color = 'gold';
+      else if (raw <= 125)  color = 'red';
+      else                  color = 'purple';
+
+      const pct   = Math.min(Math.max(raw/total,0),1)*w;
+      const size  = 16;
+      const topY  = (h-barH)/2 - 4;
+      const pts   = [
+        [pct,          topY - size],
+        [pct - size,   topY],
+        [pct + size,   topY]
+      ].map(p => p.join(',')).join(' ');
+
+      const marker = document.createElementNS(legendSvg.namespaceURI,'polygon');
+      marker.setAttribute('points', pts);
+      marker.setAttribute('class',  'marker');
+      marker.setAttribute('fill',   color);
+      legendSvg.appendChild(marker);
     }
 
-    // フォームクリア
-    function clearForm() {
-      inputEl.value = '';
-      document.querySelectorAll('input[name="kit"]').forEach(r => r.checked = false);
-      inputErr.style.display = 'none';
-      kitErr.style.display   = 'none';
-      calcBtn.disabled       = true;
-      resultEl.textContent   = '--';
-      resultUnit.textContent = ' nmol/L';
-    }
+    calcBtn.addEventListener('click', () => {
+      const raw = convertFunc(parseFloat(inputEl.value));
+      convEl.textContent = raw.toFixed(1);
 
-    // イベント登録
-    inputEl.addEventListener('input', refreshButtonState);
-    document.querySelectorAll('input[name="kit"]').forEach(el =>
-      el.addEventListener('change', refreshButtonState)
-    );
-    calcBtn.addEventListener('click', calculate);
-    clearBtn.addEventListener('click', clearForm);
+      let key, cls, label;
+      if      (raw <= 25)   { key='<=25';    cls='low';          label='Low risk'; }
+      else if (raw <= 75)   { key='25-75';   cls='intermediate'; label='Intermediate risk'; }
+      else if (raw <= 125)  { key='75-125';  cls='high';         label='High risk'; }
+      else                  { key='>125';    cls='very-high';    label='Very high risk'; }
+
+      catEl.textContent   = label;
+      riskBox.className   = `risk-box ${cls}`;
+      relEl.textContent   = `${(incidence[key]/incidence['<=25']).toFixed(2)} 倍のASCVDリスク`;
+
+      drawLegend(raw);
+    });
+
+    clearBtn.addEventListener('click', () => {
+      inputEl.value        = '';
+      calcBtn.disabled     = true;
+      convEl.textContent   = '--';
+      catEl.textContent    = '— Risk Category —';
+      relEl.textContent    = '— 倍のASCVDリスク';
+      riskBox.className    = 'risk-box';
+      legendSvg.innerHTML  = '';
+    });
   </script>
 </body>
 </html>
