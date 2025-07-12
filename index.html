@@ -37,18 +37,23 @@
     .header {
       background: var(--logo-red);
       color: #fff;
-      padding: 0.8em;
+      padding: 1em 2.5em 1em 1em;
       border-radius: 8px 8px 0 0;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: center;          /* 上下中央揃え */
+      justify-content: flex-start;  /* 左詰め */
       font-size: 1.4em;
     }
     .header .logo {
-      width: 36px; min-width: 30px; margin-right: 0.6em;
+      width: 36px;
+      min-width: 30px;
+      margin-right: 0.7em;
+      margin-top: 2px;
+      margin-bottom: 2px;
+      vertical-align: middle;
     }
-    .header span { white-space: nowrap; }
-    .header .subtitle { font-size: 0.85em; margin-left: 0.5em; }
+    .header span { white-space: nowrap; letter-spacing: -0.05em; }
+    .header .subtitle { font-size: 0.8em; margin-left: 0.4em; letter-spacing: -0.07em;}
     .description {
       background: #fff;
       border: 2px solid var(--border); border-top: none; border-radius: 0 0 8px 8px;
@@ -116,7 +121,6 @@
     }
     .labels .label-25   { left: calc(100% * 25 / 150); }
     .labels .label-75   { left: calc(100% * 75 / 150); }
-    /* 125はさらに左寄せ、nmol/Lは右端へ */
     .labels .label-125  { left: calc(100% * 125 / 150 - 24px); }
     .labels .label-unit { left: 99.5%; transform: translateX(-100%); font-size: 0.95em; }
     .btn-clear {
@@ -126,7 +130,6 @@
     }
     .references { font-size: 0.95em; color: #666; min-height: 1.2em; }
 
-    /* ======= スマホ用（600px以下） ======= */
     @media (max-width: 600px) {
       html, body { font-size: 15px; }
       .container { max-width: 99vw; }
@@ -134,7 +137,6 @@
       .labels .label-125  { left: calc(100% * 125 / 150 - 14px); }
       .labels .label-unit { left: 99%; }
     }
-    /* ======= PC・タブレット用（601px以上） ======= */
     @media (min-width: 601px) {
       html, body { font-size: 17px; }
       .container { max-width: 440px; }
