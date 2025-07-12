@@ -137,8 +137,9 @@
       .header .logo { width: 32px; }
       .labels .label-125  { left: calc(100% * 125 / 150 - 14px); }
       .labels .label-unit { left: 99%; }
-      input[type="number"], input[type="text"], input, select, textarea {
+      input, input[type="number"], input[type="text"], select, textarea {
         font-size: 16px !important;
+        /* ↑全inputが16px以上を保証（1emが15pxでもOK）*/
       }
     }
     @media (min-width: 601px) {
