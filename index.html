@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lp(a)検査値標準化ツール</title>
+  <style>
+    :root {
+      --logo-red:      #E60012;
+      --logo-purple:   #5C2682;
+      --header-bg:     var(--logo-red);
+      --accent:        var(--logo-purple);
+      --accent-light:  var(--logo-red);
+      --border:        #D8BFD8;
+      --btn-clear:     #666;
+      --text:          #333;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Helvetica Neue", sans-serif;
+      background: #fafafa;
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 1em;
+    }
+    /* ヘッダー */
+    .header {
+      background: var(--header-bg);
+      padding: 0.6em 1em;
+      border-radius: 0 0 8px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header .logo {
+      width: 36px;
+      height: auto;
+      margin-right: 0.6em;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 1.4em;
+      color: #fff;
+    }
+    /* 説明文 */
+    .description {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 0.2em 0.4em;
+      margin: 0.3em 0;
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+    .description p {
+      margin: 0;
+      padding: 0;
+    }
+    /* フォーム */
+    form {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 1em;
+    }
+    .field {
+      margin-bottom: 1em;
+    }
+    .field label {
+      display: block;
+      margin-bottom: 0.3em;
+      font-weight: bold;
+    }
+    .field input[type="number"] {
+      width: 100%;
+      padding: 0.6em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1em;
+    }
+    .error {
+      color: #d00;
+      font-size: 0.85em;
+      display: none;
+      margin-top: 0.3em;
+    }
+    /* キット選択グリッド（2列） */
+    .kit-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5em;
+    }
+    .kit-grid label {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 0.5em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    .kit-grid input[type="radio"] {
+      margin-right: 0.4em;
+    }
+    /* ボタン */
+    .btn {
+      width: 100%;
+      padding: 0.8em;
+      font-size: 1em;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-calc {
+      background: linear-gradient(to right, var(--accent), var(--accent-light));
+      color: #fff;
+      margin-top: 0.5em;
+    }
+    .btn-calc:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .btn-clear {
+      background: var(--btn-clear);
+      color: #fff;
+      margin-top: 0.5em;
+    }
+    /* 結果表示 */
+    .result-box {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 1em;
+      margin-top: 1em;
+      text-align: center;
+    }
+    .result-box .label {
+      font-weight: bold;
+      margin-bottom: 0.5em;
+      display: block;
+    }
+    .result-box .value {
+      font-size: 1.4em;
+      color: var(--accent);
+    }
+    /* 注意書き */
+    .disclaimer {
+      font-size: 0.85em;
+      color: #666;
+      margin-top: 0.5em;
+      line-height: 1.4;
+    }
+    /* 制作者 */
+    .creator {
+      text-align: center;
+      font-size: 0.85em;
+      color: #666;
+      margin-top: 0.5em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ヘッダー -->
+    <div class="header">
+      <img src="jas-logo.png" alt="日本動脈硬化学会ロゴ" class="logo">
+      <h1>Lp(a)検査値標準化ツール</h1>
+    </div>
+
+    <!-- 説明文 -->
+    <div class="description">
+      <p>このツールは、Lp(a)検査値のmg/dL表記をnmol/Lに変換します。</p>
+    </div>
+
+    <!-- 入力フォーム -->
+    <form id="calcForm">
+      <div class="field">
+        <label for="inputValue">測定値を入力（mg/dL）</label>
+        <input id="inputValue" type="number" step="any" placeholder="例：16">
+        <p id="inputError" class="error">有効な数値を入力してください</p>
+      </div>
+      <div class="field">
+        <fieldset>
+          <legend>検査キットを選択</legend>
+          <div class="kit-grid">
+            <label><input type="radio" name="kit" value="kitA">Sekisui</label>
+            <label><input type="radio" name="kit" value="kitB">Denka（国内）</label>
+            <label><input type="radio" name="kit" value="kitC">Denka（海外）</label>
+            <label><input type="radio" name="kit" value="kitD">Nittobo</label>
+          </div>
+        </fieldset>
+        <p id="kitError" class="error">キットを選択してください</p>
+      </div>
+      <button type="button" id="calcBtn" class="btn btn-calc" disabled>計算する</button>
+    </form>
+
+    <!-- 結果表示 -->
+    <div class="result-box">
+      <span class="label">標準値</span>
+      <span class="value" id="result">--</span>
+      <span id="resultUnit"> nmol/L</span>
+    </div>
+
+    <!-- 注意書き -->
+    <p class="disclaimer">
+   　　0.6以下の標準値はすべて「0.6未満」と表示されます。 <br>
+     
+    </p>
+
+    <!-- クリアボタン -->
+    <button type="button" id="clearBtn" class="btn btn-clear">入力内容をクリア</button>
+
+    <!-- 制作者 -->
+    <p class="creator">参考文献: J Atheroscler Thromb. 2025;32:580-595</p>
+  </div>
+
+  <script>
+    // キットごとの換算式
+    const kitFormulas = {
+      kitA: x => 3.77 * x - 2.39,
+      kitB: x => 2.04 * x - 2.77,
+      kitC: x => 2.08 * x - 2.73,
+      kitD: x => 2.40 * x - 8.64,
+    };
+    // 出力単位（すべて nmol/L）
+    const kitUnits = {
+      kitA: 'nmol/L',
+      kitB: 'nmol/L',
+      kitC: 'nmol/L',
+      kitD: 'nmol/L'
+    };
+
+    const inputEl    = document.getElementById('inputValue');
+    const inputErr   = document.getElementById('inputError');
+    const kitErr     = document.getElementById('kitError');
+    const calcBtn    = document.getElementById('calcBtn');
+    const clearBtn   = document.getElementById('clearBtn');
+    const resultEl   = document.getElementById('result');
+    const resultUnit = document.getElementById('resultUnit');
+
+    function showToast(msg) {
+      alert(msg);
+    }
+
+    // 入力＆選択の状態でボタン有効化
+    function refreshButtonState() {
+      const hasVal = !isNaN(parseFloat(inputEl.value));
+      const hasKit = !!document.querySelector('input[name="kit"]:checked');
+      calcBtn.disabled = !(hasVal && hasKit);
+    }
+
+    // インライン・バリデーション
+    function validate() {
+      let ok = true;
+      if (inputEl.value.trim() === '' || isNaN(parseFloat(inputEl.value))) {
+        inputErr.style.display = 'block'; ok = false;
+      } else {
+        inputErr.style.display = 'none';
+      }
+      if (!document.querySelector('input[name="kit"]:checked')) {
+        kitErr.style.display = 'block'; ok = false;
+      } else {
+        kitErr.style.display = 'none';
+      }
+      return ok;
+    }
+
+    // 計算処理
+    function calculate() {
+      if (!validate()) {
+        showToast('入力内容を確認してください');
+        return;
+      }
+      const x   = parseFloat(inputEl.value);
+      const kit = document.querySelector('input[name="kit"]:checked').value;
+      // 一度だけ宣言
+      const raw = kitFormulas[kit](x);
+
+      // 0.6以下なら「0.6未満」、それ以外は小数点2桁
+      let displayValue;
+      if (raw <= 0.6) {
+        displayValue = '0.6未満';
+      } else {
+        displayValue = raw.toFixed(2);
+      }
+
+      resultEl.textContent   = displayValue;
+      resultUnit.textContent = kitUnits[kit];
+    }
+
+    // フォームクリア
+    function clearForm() {
+      inputEl.value = '';
+      document.querySelectorAll('input[name="kit"]').forEach(r => r.checked = false);
+      inputErr.style.display = 'none';
+      kitErr.style.display   = 'none';
+      calcBtn.disabled       = true;
+      resultEl.textContent   = '--';
+      resultUnit.textContent = ' nmol/L';
+    }
+
+    // イベント登録
+    inputEl.addEventListener('input', refreshButtonState);
+    document.querySelectorAll('input[name="kit"]').forEach(el =>
+      el.addEventListener('change', refreshButtonState)
+    );
+    calcBtn.addEventListener('click', calculate);
+    clearBtn.addEventListener('click', clearForm);
+  </script>
+</body>
+</html>
