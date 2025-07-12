@@ -18,103 +18,129 @@
       --color-very-high:  #800080;
       --text-on-risk:     #fff;
     }
-    * { box-sizing: border-box; margin:0; padding:0; }
-    html, body { width:100%; height:100%; }
+    html, body {
+      width: 100%; height: 100%;
+      margin: 0; padding: 0;
+      font-family: "Helvetica Neue", sans-serif;
+      background: #fafafa;
+      color: var(--text);
+    }
     body {
-      font-family:"Helvetica Neue",sans-serif;
-      background:#fafafa;
-      color:var(--text);
-      padding:1vh 3vw;
-      line-height:1.4;
+      font-size: 16px;
+      padding: 1.5em 0.5em 1.5em 0.5em;
+      line-height: 1.5;
     }
-    .container { max-width:420px; margin:0 auto; }
+    .container {
+      max-width: 420px;
+      margin: 0 auto;
+    }
     .header {
-      background:var(--logo-red);
-      color:#fff;
-      padding:1vh 2vw;
-      border-radius:8px 8px 0 0;
-      display:flex; align-items:center; justify-content:center;
-      font-size:4vw;
+      background: var(--logo-red);
+      color: #fff;
+      padding: 0.8em;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4em;
     }
-    .header .logo { width:8vw; max-width:36px; margin-right:1vw; }
-    .header span { white-space:nowrap; }
-    .header .subtitle { font-size:2.5vw; margin-left:1vw; }
+    .header .logo {
+      width: 36px; min-width: 30px; margin-right: 0.6em;
+    }
+    .header span { white-space: nowrap; }
+    .header .subtitle { font-size: 0.85em; margin-left: 0.5em; }
     .description {
-      background:#fff;
-      border:2px solid var(--border); border-top:none; border-radius:0 0 8px 8px;
-      padding:1vh 2vw; margin-bottom:2vh; font-size:3.5vw;
+      background: #fff;
+      border: 2px solid var(--border); border-top: none; border-radius: 0 0 8px 8px;
+      padding: 1em; margin-bottom: 1em; font-size: 1em;
     }
-    .input-label { font-weight:bold; margin-bottom:1vh; font-size:4vw; }
+    .input-label { font-weight: bold; margin-bottom: 0.5em; font-size: 1em; }
     .input-row {
-      display:flex; flex-wrap:wrap; gap:1vw; margin-bottom:2vh;
+      display: flex; flex-wrap: wrap; gap: 0.7em; margin-bottom: 1em;
     }
     .input-row input,
-    .input-row button { flex:1 1 0; min-width:0; }
+    .input-row button { flex: 1 1 0; min-width: 0; }
     .input-row input {
-      padding:1vh; font-size:4vw;
-      border:2px solid var(--border); border-radius:4px;
+      padding: 0.7em; font-size: 1em;
+      border: 2px solid var(--border); border-radius: 4px;
     }
     .input-row button {
-      padding:1vh; font-size:4vw;
-      border:none; border-radius:4px;
-      background:linear-gradient(to right, var(--logo-purple), var(--accent-light));
-      color:#fff; cursor:pointer;
+      padding: 0.7em; font-size: 1em;
+      border: none; border-radius: 4px;
+      background: linear-gradient(to right, var(--logo-purple), var(--accent-light));
+      color: #fff; cursor: pointer;
     }
-    .input-row button:disabled { opacity:0.6; cursor:not-allowed; }
-    .result-row { margin-bottom:2vh; }
+    .input-row button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .result-row { margin-bottom: 1em; }
     .result-box {
-      background:#fff; border:2px solid var(--border);
-      border-radius:8px; padding:1vh 2vw; text-align:center;
+      background: #fff; border: 2px solid var(--border);
+      border-radius: 8px; padding: 0.7em 1em; text-align: center;
     }
-    .result-box .label { display:block; font-weight:bold; margin-bottom:1vh; font-size:4vw; }
-    .result-box .value { font-size:5vw; color:var(--logo-purple); }
+    .result-box .label { display: block; font-weight: bold; margin-bottom: 0.3em; font-size: 1em; }
+    .result-box .value { font-size: 1.4em; color: var(--logo-purple); }
     .risk-box {
-      border:2px solid var(--border); border-radius:8px;
-      padding:2vh 2vw; text-align:center; margin-bottom:3vh;
-      color:var(--text-on-risk);
+      border: 2px solid var(--border); border-radius: 8px;
+      padding: 1em 0.5em; text-align: center; margin-bottom: 1.5em;
+      color: var(--text-on-risk);
     }
-    .risk-box.low          { background:var(--color-low); }
-    .risk-box.intermediate { background:var(--color-inter); }
-    .risk-box.high         { background:var(--color-high); }
-    .risk-box.very-high    { background:var(--color-very-high); }
+    .risk-box.low          { background: var(--color-low); }
+    .risk-box.intermediate { background: var(--color-inter); }
+    .risk-box.high         { background: var(--color-high); }
+    .risk-box.very-high    { background: var(--color-very-high); }
     .risk-box .title {
-      font-size:5vw; font-weight:bold; margin-bottom:1vh;
+      font-size: 1.35em; font-weight: bold; margin-bottom: 0.3em;
     }
-    .risk-box .subtitle { font-size:4vw; }
+    .risk-box .subtitle { font-size: 1.1em; }
     .legend-container {
-      position:relative; width:100%; white-space:nowrap; margin-bottom:4vh;
+      position: relative; width: 100%; white-space: nowrap; margin-bottom: 2em;
     }
     svg#legendSvg {
-      width:100%; height:36px; overflow:visible; display:block;
+      width: 100%; height: 36px; overflow: visible; display: block;
     }
     .marker {
-      transform-origin:center;
+      transform-origin: center;
       animation: pulse 1s ease-in-out infinite;
       stroke: #fff;
       stroke-width: 2;
     }
     @keyframes pulse {
-      0%,100%{transform:scale(1);}
-      50%{transform:scale(1.05);}
+      0%,100% { transform: scale(1); }
+      50%     { transform: scale(1.05); }
     }
     .labels {
-      position:absolute; top:100%; left:0; width:100%; height:1.2em; pointer-events:none;
+      position: absolute; top: 100%; left: 0; width: 100%; height: 1.2em; pointer-events: none;
     }
     .labels span {
-      position:absolute; top:0; font-size:3.5vw; color:#555;
-      transform:translateX(-50%); white-space:nowrap;
+      position: absolute; top: 0; font-size: 1em; color: #555;
+      transform: translateX(-50%); white-space: nowrap;
     }
-    .labels .label-25   { left:calc(100% * 25 / 150); }
-    .labels .label-75   { left:calc(100% * 75 / 150); }
-    /* 125の数字を右にずらすことでnmol/Lと重なり防止 */
-    .labels .label-125  { left:calc(100% *125 / 150 - 10px); }
-    .labels .label-unit { left:99%; transform:translateX(-100%); font-size:0.9em; }
+    .labels .label-25   { left: calc(100% * 25 / 150); }
+    .labels .label-75   { left: calc(100% * 75 / 150); }
+    /* 125はさらに左寄せ、nmol/Lは右端へ */
+    .labels .label-125  { left: calc(100% * 125 / 150 - 24px); }
+    .labels .label-unit { left: 99.5%; transform: translateX(-100%); font-size: 0.95em; }
     .btn-clear {
-      display:block; width:100%; padding:2vh 0;
-      border:none; border-radius:4px; background:var(--btn-clear);
-      color:#fff; font-size:4vw; cursor:pointer; margin-bottom:2vh;
+      display: block; width: 100%; padding: 1em 0;
+      border: none; border-radius: 4px; background: var(--btn-clear);
+      color: #fff; font-size: 1.15em; cursor: pointer; margin-bottom: 1.2em;
     }
-    .references { font-size:3.5vw; color:#666; min-height:1.2em; }
+    .references { font-size: 0.95em; color: #666; min-height: 1.2em; }
+
+    /* ======= スマホ用（600px以下） ======= */
+    @media (max-width: 600px) {
+      html, body { font-size: 15px; }
+      .container { max-width: 99vw; }
+      .header .logo { width: 32px; }
+      .labels .label-125  { left: calc(100% * 125 / 150 - 14px); }
+      .labels .label-unit { left: 99%; }
+    }
+    /* ======= PC・タブレット用（601px以上） ======= */
+    @media (min-width: 601px) {
+      html, body { font-size: 17px; }
+      .container { max-width: 440px; }
+      .labels .label-125  { left: calc(100% * 125 / 150 - 28px); }
+      .labels .label-unit { left: 99.7%; }
+    }
   </style>
 </head>
 <body>
@@ -152,7 +178,7 @@
       </div>
     </div>
     <button id="clearBtn" class="btn-clear">入力内容をクリア</button>
-    <div class="references"><!-- 文献 --></div>
+    <div class="references"></div>
   </div>
   <script>
     const convertFunc = x => 3.77*x - 2.39;
@@ -196,13 +222,13 @@
       // バーの上側に下向き三角（▽）
       const pct=Math.min(Math.max(raw/total,0),1)*w,
             size=12,
-            markerOffset=12, // バー上からどれだけ離すか（px）
-            barY=(h-barH)/2,  // バーの上端
+            markerOffset=16,
+            barY=(h-barH)/2,
             markerY=barY-markerOffset,
             pts=[
-              [pct,markerY+size],            // 頂点：下
-              [pct-size,markerY],            // 左上
-              [pct+size,markerY]             // 右上
+              [pct,markerY+size],    // 頂点：下
+              [pct-size,markerY],    // 左上
+              [pct+size,markerY]     // 右上
             ].map(p=>p.join(',')).join(' ');
       const m=document.createElementNS(legendSvg.namespaceURI,'polygon');
       m.setAttribute('points',pts);
