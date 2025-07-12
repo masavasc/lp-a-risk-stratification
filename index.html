@@ -24,15 +24,12 @@
       font-family: "Helvetica Neue", sans-serif;
       background: #fafafa;
       color: var(--text);
-    }
-    body {
-      font-size: 16px;
-      padding: 1.5em 0.5em 1.5em 0.5em;
-      line-height: 1.5;
+      font-size: 16px;           /* ← これが重要 */
     }
     .container {
       max-width: 420px;
       margin: 0 auto;
+      padding: 1em;
     }
     .header {
       background: var(--logo-red);
@@ -40,8 +37,8 @@
       padding: 1em 2em 1em 1em;
       border-radius: 8px 8px 0 0;
       display: flex;
-      align-items: center;          /* 上下中央揃え */
-      justify-content: flex-start;  /* 左詰め */
+      align-items: center;
+      justify-content: flex-start;
       font-size: 1.4em;
     }
     .header .logo {
@@ -66,7 +63,8 @@
     .input-row input,
     .input-row button { flex: 1 1 0; min-width: 0; }
     .input-row input {
-      padding: 0.7em; font-size: 1em;
+      padding: 0.7em;
+      font-size: 1em;              /* ← 1em = 16pxでズームイン回避 */
       border: 2px solid var(--border); border-radius: 4px;
     }
     .input-row button {
@@ -130,17 +128,13 @@
     }
     .references { font-size: 0.95em; color: #666; min-height: 1.2em; }
 
-    /* ------ スマホでの入力時ズーム回避！ -------- */
     @media (max-width: 600px) {
-      html, body { font-size: 15px; }
+      html, body { font-size: 16px; }
       .container { max-width: 99vw; }
       .header .logo { width: 32px; }
       .labels .label-125  { left: calc(100% * 125 / 150 - 14px); }
       .labels .label-unit { left: 99%; }
-      input, input[type="number"], input[type="text"], select, textarea {
-        font-size: 16px !important;
-        /* ↑全inputが16px以上を保証（1emが15pxでもOK）*/
-      }
+      /* ズーム防止の追加指定は不要! （親アプリ参考） */
     }
     @media (min-width: 601px) {
       html, body { font-size: 17px; }
