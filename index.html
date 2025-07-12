@@ -137,40 +137,49 @@
       font-size: 1em;
     }
     /*――― SVG 凡例バー ―――*/
-    svg#legendSvg {
-      width: 100%;
-      height: 50px;
-      overflow: visible;
-      display: block;
-      margin-bottom: 0;
-    }
-    .marker {
-      transform-origin: center;
-      animation: pulse 1s ease-in-out infinite;
-      stroke: #fff;
-      stroke-width: 2;
-    }
-    @keyframes pulse {
-      0%,100% { transform: scale(1); }
-      50%     { transform: scale(1.05); }
-    }
-    /*――― 目盛りラベル ―――*/
-    .labels {
-      position: relative;
-      height: 0;
-      margin-bottom: 1em;
-    }
-    .labels span {
-      position: absolute;
-      top: -0.9em;
-      font-size: 1em;
-      color: #555;
-      transform: translateX(-50%);
-    }
-    .labels .label-25   { left: 16.667%; }
-    .labels .label-75   { left: 50%;     }
-    .labels .label-125  { left: 83.333%; }
-    .labels .label-unit { left: 100%;    transform: translateX(-100%); }
+svg#legendSvg {
+  width: 100%;
+  height: 30px;                  /* 高さを 50 → 30px に縮小 */
+  overflow: visible;
+  display: block;
+  margin-bottom: 0;
+}
+
+/* ─── マーカーサイズ ─── */
+.marker {
+  /* pulse アニメはそのまま、サイズを小さく */
+  transform-origin: center;
+  animation: pulse 1s ease-in-out infinite;
+  stroke: #fff;
+  stroke-width: 2;
+}
+/* マーカーを描くときの size を 12 に変更 */
+/* ← JS 側 drawLegend() の "const size = 16;" を "const size = 12;" に */
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.05); }
+}
+
+/* ─── 目盛りラベル ─── */
+.labels {
+  position: relative;
+  height: 0;
+  margin-bottom: 0.5em;       /* 間隔を少し詰める */
+  white-space: nowrap;        /* ラベルが改行されないように */
+}
+.labels span {
+  position: absolute;
+  top: -0.7em;                /* 縦位置を調整 */
+  font-size: 0.9em;           /* フォントサイズを少し小さく */
+  color: #555;
+  transform: translateX(-50%);
+}
+.labels .label-25   { left: 16.667%; }
+.labels .label-75   { left: 50%;     }
+.labels .label-125  { left: 83.333%; }
+.labels .label-unit { left: 100%;    transform: translateX(-100%); }
+
     /*――― クリアボタン ―――*/
     .btn-clear {
       display: block;
