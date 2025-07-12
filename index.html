@@ -12,11 +12,10 @@
       --border:        #D8BFD8;
       --btn-clear:     #888;
       --text:          #333;
-      /* リスクカラー：原色に近い濃さ */
-      --color-low:        #28a745; /* 緑 */
-      --color-inter:      #ffc107; /* 黄 */
-      --color-high:       #dc3545; /* 赤 */
-      --color-very-high:  #800080; /* より濃い紫 */
+      --color-low:        #28a745;   /* 緑 */
+      --color-inter:      #ffc107;   /* 黄 */
+      --color-high:       #dc3545;   /* 赤 */
+      --color-very-high:  #800080;   /* 濃い紫 */
       --text-on-risk:     #fff;
     }
     * { box-sizing: border-box; }
@@ -45,11 +44,9 @@
       width: 36px;
       margin-right: 0.5em;
     }
-    .header span {
-      white-space: nowrap;
-    }
+    .header span { white-space: nowrap; }
     .header .subtitle {
-      font-size: 0.7em; /* さらに50％小さく */
+      font-size: 0.7em;   /* さらに50%小さく */
       margin-left: 0.3em;
     }
     /*――― 説明文 ―――*/
@@ -64,24 +61,25 @@
       line-height: 1.4;
     }
     /*――― 入力フォーム ―――*/
-    .input-label {
-      font-weight: bold;
-      margin-bottom: 0.3em;
-    }
+    .input-label { font-weight: bold; margin-bottom: 0.3em; }
     .input-row {
       display: flex;
+      flex-wrap: wrap;           /* 幅足りないと折り返す */
       gap: 0.5em;
       margin-bottom: 0.5em;
     }
+    .input-row input,
+    .input-row button {
+      flex: 1 1 0;               /* 縮められるよう basis=0 */
+      min-width: 0;              /* 必ず縮む */
+    }
     .input-row input {
-      flex: 1;
       padding: 0.6em;
       font-size: 1em;
       border: 2px solid var(--border);
       border-radius: 4px;
     }
     .input-row button {
-      flex: 1;
       padding: 0.6em;
       font-size: 1em;
       border: none;
@@ -91,13 +89,10 @@
       cursor: pointer;
     }
     .input-row button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+      opacity: 0.6; cursor: not-allowed;
     }
     /*――― 結果 ―――*/
-    .result-row {
-      margin-bottom: 1em;
-    }
+    .result-row { margin-bottom: 1em; }
     .result-box {
       background: #fff;
       border: 2px solid var(--border);
@@ -105,15 +100,8 @@
       padding: 0.6em;
       text-align: center;
     }
-    .result-box .label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 0.3em;
-    }
-    .result-box .value {
-      font-size: 1.4em;
-      color: var(--logo-purple);
-    }
+    .result-box .label { display: block; font-weight: bold; margin-bottom: 0.3em; }
+    .result-box .value { font-size: 1.4em; color: var(--logo-purple); }
     /*――― リスク表示 ―――*/
     .risk-box {
       background: #fff;
@@ -133,54 +121,50 @@
       font-weight: bold;
       margin-bottom: 0.3em;
     }
-    .risk-box .subtitle {
-      font-size: 1em;
+    .risk-box .subtitle { font-size: 1em; }
+    /*――― 凡例バー ＆ ラベル ―――*/
+    .legend-container {
+      position: relative;
+      width: 100%;
+      white-space: nowrap;      /* １行強制 */
+      margin-bottom: 0.5em;
     }
-    /*――― SVG 凡例バー ―――*/
-svg#legendSvg {
-  width: 100%;
-  height: 30px;                  /* 高さを 50 → 30px に縮小 */
-  overflow: visible;
-  display: block;
-  margin-bottom: 0;
-}
-
-/* ─── マーカーサイズ ─── */
-.marker {
-  /* pulse アニメはそのまま、サイズを小さく */
-  transform-origin: center;
-  animation: pulse 1s ease-in-out infinite;
-  stroke: #fff;
-  stroke-width: 2;
-}
-/* マーカーを描くときの size を 12 に変更 */
-/* ← JS 側 drawLegend() の "const size = 16;" を "const size = 12;" に */
-
-@keyframes pulse {
-  0%,100% { transform: scale(1); }
-  50%     { transform: scale(1.05); }
-}
-
-/* ─── 目盛りラベル ─── */
-.labels {
-  position: relative;
-  height: 0;
-  margin-bottom: 0.5em;       /* 間隔を少し詰める */
-  white-space: nowrap;        /* ラベルが改行されないように */
-}
-.labels span {
-  position: absolute;
-  top: -0.7em;                /* 縦位置を調整 */
-  font-size: 0.9em;           /* フォントサイズを少し小さく */
-  color: #555;
-  transform: translateX(-50%);
-}
-.labels .label-25   { left: 16.667%; }
-.labels .label-75   { left: 50%;     }
-.labels .label-125  { left: 83.333%; }
-.labels .label-unit { left: 100%;    transform: translateX(-100%); }
-
-    /*――― クリアボタン ―――*/
+    svg#legendSvg {
+      width: 100%;
+      height: 20px;             /* 高さを 20px に */
+      display: block;
+    }
+    .marker {
+      transform-origin: center;
+      animation: pulse 1s ease-in-out infinite;
+      stroke: #fff;
+      stroke-width: 2;
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50%     { transform: scale(1.05); }
+    }
+    .labels {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 1.2em;
+      pointer-events: none;
+    }
+    .labels span {
+      position: absolute;
+      top: 0;
+      font-size: 0.85em;
+      color: #555;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+    .labels .label-25   { left: calc(100% * 25 / 150); }
+    .labels .label-75   { left: calc(100% * 75 / 150); }
+    .labels .label-125  { left: calc(100% *125 / 150); }
+    .labels .label-unit { left: 100%; transform: translateX(-100%); }
+    /*――― クリアボタン & 文献 ―――*/
     .btn-clear {
       display: block;
       width: 100%;
@@ -193,7 +177,6 @@ svg#legendSvg {
       cursor: pointer;
       margin-bottom: 0.5em;
     }
-    /*――― 文献スペース ―――*/
     .references {
       min-height: 2em;
       font-size: 0.85em;
@@ -231,12 +214,14 @@ svg#legendSvg {
       <div class="subtitle" id="relativeRisk">— 倍のASCVDリスク</div>
     </div>
 
-    <svg id="legendSvg"></svg>
-    <div class="labels">
-      <span class="label-25">25</span>
-      <span class="label-75">75</span>
-      <span class="label-125">125</span>
-      <span class="label-unit">nmol/L</span>
+    <div class="legend-container">
+      <svg id="legendSvg"></svg>
+      <div class="labels">
+        <span class="label-25">25</span>
+        <span class="label-75">75</span>
+        <span class="label-125">125</span>
+        <span class="label-unit">nmol/L</span>
+      </div>
     </div>
 
     <button id="clearBtn" class="btn-clear">入力内容をクリア</button>
@@ -247,12 +232,7 @@ svg#legendSvg {
 
   <script>
     const convertFunc = x => 3.77 * x - 2.39;
-    const incidence = {
-      '<=25':   0.21,
-      '25-75':  0.34,
-      '75-125': 0.36,
-      '>125':   0.42
-    };
+    const incidence   = { '<=25':0.21, '25-75':0.34, '75-125':0.36, '>125':0.42 };
 
     const inputEl   = document.getElementById('inputValue');
     const calcBtn   = document.getElementById('calcBtn');
@@ -264,26 +244,25 @@ svg#legendSvg {
     const clearBtn  = document.getElementById('clearBtn');
 
     inputEl.addEventListener('input', () => {
-      calcBtn.disabled = !(inputEl.value.trim() && !isNaN(parseFloat(inputEl.value)));
+      calcBtn.disabled = !(inputEl.value.trim() && !isNaN(+inputEl.value));
     });
 
     function drawLegend(raw) {
-      const w          = legendSvg.clientWidth;
-      const h          = legendSvg.clientHeight;
-      const barH       = 10;
-      const thresholds = [0,25,75,125,150];
-      const total      = thresholds[4];
+      const w = legendSvg.clientWidth,
+            h = legendSvg.clientHeight,
+            barH = 10,
+            th = [0,25,75,125,150],
+            total = th[4];
 
       if (!legendSvg.querySelector('rect')) {
         ['green','orange','red','purple'].forEach((col,i) => {
-          const start = thresholds[i], end = thresholds[i+1];
-          const rect  = document.createElementNS(legendSvg.namespaceURI,'rect');
-          rect.setAttribute('x',     (start/total)*w);
-          rect.setAttribute('y',     (h-barH)/2);
-          rect.setAttribute('width', ((end-start)/total)*w);
-          rect.setAttribute('height', barH);
-          rect.setAttribute('fill',  col);
-          legendSvg.appendChild(rect);
+          const r = document.createElementNS(legendSvg.namespaceURI,'rect');
+          r.setAttribute('x',     (th[i]/total)*w);
+          r.setAttribute('y',     (h-barH)/2);
+          r.setAttribute('width', ((th[i+1]-th[i])/total)*w);
+          r.setAttribute('height',barH);
+          r.setAttribute('fill',  col);
+          legendSvg.appendChild(r);
         });
       }
 
@@ -291,40 +270,35 @@ svg#legendSvg {
       if (old) legendSvg.removeChild(old);
 
       let color;
-      if      (raw <= 25)   color = 'green';
-      else if (raw <= 75)   color = 'gold';
-      else if (raw <= 125)  color = 'red';
-      else                  color = 'purple';
+      if      (raw <=25)   color='green';
+      else if (raw <=75)   color='gold';
+      else if (raw <=125)  color='red';
+      else                 color='purple';
 
-      const pct   = Math.min(Math.max(raw/total,0),1)*w;
-      const size  = 12;
-      const topY  = (h-barH)/2 - 4;
-      const pts   = [
-        [pct,          topY - size],
-        [pct - size,   topY],
-        [pct + size,   topY]
-      ].map(p => p.join(',')).join(' ');
-
-      const marker = document.createElementNS(legendSvg.namespaceURI,'polygon');
-      marker.setAttribute('points', pts);
-      marker.setAttribute('class',  'marker');
-      marker.setAttribute('fill',   color);
-      legendSvg.appendChild(marker);
+      const pct = Math.min(Math.max(raw/total,0),1)*w,
+            size=12,
+            topY=(h-barH)/2-4,
+            pts=`${pct},${topY-size} ${pct-size},${topY} ${pct+size},${topY}`;
+      const m = document.createElementNS(legendSvg.namespaceURI,'polygon');
+      m.setAttribute('points',pts);
+      m.setAttribute('class','marker');
+      m.setAttribute('fill', color);
+      legendSvg.appendChild(m);
     }
 
     calcBtn.addEventListener('click', () => {
-      const raw = convertFunc(parseFloat(inputEl.value));
+      const raw = convertFunc(+inputEl.value);
       convEl.textContent = raw.toFixed(1);
 
       let key, cls, label;
-      if      (raw <= 25)   { key='<=25';    cls='low';          label='Low risk'; }
-      else if (raw <= 75)   { key='25-75';   cls='intermediate'; label='Intermediate risk'; }
-      else if (raw <= 125)  { key='75-125';  cls='high';         label='High risk'; }
-      else                  { key='>125';    cls='very-high';    label='Very high risk'; }
+      if      (raw <=25)  { key='<=25';   cls='low';          label='Low risk'; }
+      else if (raw <=75)  { key='25-75';  cls='intermediate'; label='Intermediate risk'; }
+      else if (raw <=125) { key='75-125'; cls='high';         label='High risk'; }
+      else                { key='>125';   cls='very-high';    label='Very high risk'; }
 
-      catEl.textContent   = label;
-      riskBox.className   = `risk-box ${cls}`;
-      relEl.textContent   = `${(incidence[key]/incidence['<=25']).toFixed(2)} 倍のASCVDリスク`;
+      catEl.textContent = label;
+      riskBox.className = `risk-box ${cls}`;
+      relEl.textContent = `${(incidence[key]/incidence['<=25']).toFixed(2)} 倍のASCVDリスク`;
 
       drawLegend(raw);
     });
